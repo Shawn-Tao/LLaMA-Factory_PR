@@ -1,0 +1,15 @@
+### Note: DO NOT use quantized model or quantization_bit when merging lora adapters
+
+### model
+model_name_or_path: Qwen/Qwen2.5-VL-3B-Instruct
+# adapter_name_or_path: saves/qwen2_vl-3b/lora/sft
+adapter_name_or_path: /LLM-VLM/train_saves/R2R-240-5-20epoch-20250612/qwen2_vl-3b/lora/sft/checkpoint-1000
+template: qwen2_vl
+trust_remote_code: true
+
+### export
+# export_dir: output/qwen2_vl_lora_sft
+export_dir: /LLM-VLM/train_saves/R2R-240-5-20epoch-20250612/qwen2_vl-3b/outputs
+export_size: 5
+export_device: cpu
+export_legacy_format: false
