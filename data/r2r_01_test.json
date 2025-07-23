@@ -1,0 +1,399 @@
+[
+  {
+    "messages": [
+      {
+        "content": "You are a robot programmed for navigation tasks. You have given serial of historical obervations:  <image> <image> and current observation: <image>. You last action is: \"turn right 45 degree\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+        "role": "user"
+      },
+      {
+        "content": "move forward 0.75 meters",
+        "role": "assistant"
+      }
+    ],
+    "images": [
+      "/LLM-VLM/infer_data_bak/20250707-011036/infer_round_1/image_0.jpg",
+      "/LLM-VLM/infer_data_bak/20250707-011036/infer_round_1/image_1.jpg",
+      "/LLM-VLM/infer_data_bak/20250707-011036/infer_round_1/image_2.jpg"
+    ]
+  },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have given serial of historical obervations:  <image> <image> and current observation: <image>. You last action is: \"turn right 45 degree\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "move forward 0.75 meters",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_6.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given current observation: <image>. Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "turn right 45 degrees",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> and current observation: <image>. You last action is: \"turn right 45 degree\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "turn right 45 degrees",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> <image> and current observation: <image>. You last action is: \"turn right 45 degree\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "move forward 0.75 meters",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_6.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> <image> <image> and current observation: <image>. You last action is: \"move forward 0.75 meter\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "move forward 0.75 meters",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_6.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_9.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> <image> <image> <image> and current observation: <image>. You last action is: \"move forward 0.75 meter\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "move forward 0.75 meters",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_6.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_9.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_12.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> <image> <image> <image> <image> and current observation: <image>. You last action is: \"move forward 0.75 meter\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "move forward 0.5 meters",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_6.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_9.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_12.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_15.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> <image> <image> <image> <image> <image> and current observation: <image>. You last action is: \"move forward 0.5 meter\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "turn left 15 degrees",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_6.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_9.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_12.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_15.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_17.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> <image> <image> <image> <image> <image> <image> and current observation: <image>. You last action is: \"turn left 15 degree\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "move forward 0.25 meters",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_6.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_9.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_12.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_15.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_17.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_18.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> <image> <image> <image> <image> <image> <image> <image> and current observation: <image>. You last action is: \"move forward 0.25 meter\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "turn left 45 degrees",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_6.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_9.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_12.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_15.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_17.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_18.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_19.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> <image> <image> <image> <image> <image> <image> <image> <image> and current observation: <image>. You last action is: \"turn left 45 degree\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "turn left 15 degrees",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_6.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_9.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_12.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_15.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_17.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_18.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_19.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_22.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> <image> <image> <image> <image> <image> <image> <image> <image> and current observation: <image>. You last action is: \"turn left 15 degree\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "move forward 0.75 meters",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_6.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_9.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_12.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_15.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_17.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_18.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_19.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_23.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> <image> <image> <image> <image> <image> <image> <image> <image> and current observation: <image>. You last action is: \"move forward 0.75 meter\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "move forward 0.75 meters",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_6.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_9.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_12.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_17.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_18.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_19.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_22.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_26.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> <image> <image> <image> <image> <image> <image> <image> <image> and current observation: <image>. You last action is: \"move forward 0.75 meter\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "move forward 0.5 meters",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_6.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_12.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_15.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_17.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_19.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_22.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_23.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_29.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> <image> <image> <image> <image> <image> <image> <image> <image> and current observation: <image>. You last action is: \"move forward 0.5 meter\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "turn left 15 degrees",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_6.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_12.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_15.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_18.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_19.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_23.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_26.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_31.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> <image> <image> <image> <image> <image> <image> <image> <image> and current observation: <image>. You last action is: \"turn left 15 degree\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "move forward 0.75 meters",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_9.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_12.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_17.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_18.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_22.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_23.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_29.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_32.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> <image> <image> <image> <image> <image> <image> <image> <image> and current observation: <image>. You last action is: \"move forward 0.75 meter\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "move forward 0.75 meters",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_9.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_15.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_17.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_19.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_23.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_26.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_31.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_35.jpg"
+      ]
+    },
+    {
+      "messages": [
+        {
+          "content": "You are a robot programmed for navigation tasks. You have been given serial of historical obervations: <image> <image> <image> <image> <image> <image> <image> <image> <image> and current observation: <image>. You last action is: \"move forward 0.75 meter\".Your assigned task is: \"Go around the right side of the center unit and stop by the right side doorway with the dining table and mirror in it. \". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete.",
+          "role": "user"
+        },
+        {
+          "content": "stop",
+          "role": "assistant"
+        }
+      ],
+      "images": [
+        "data/vln_datasets/r2r_train_424_240/1/1_0.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_3.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_9.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_15.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_18.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_19.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_23.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_29.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_32.jpg",
+        "data/vln_datasets/r2r_train_424_240/1/1_38.jpg"
+      ]
+    }
+]

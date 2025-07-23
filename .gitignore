@@ -178,5 +178,5 @@ saves/
 output/
 wandb/
 swanlog/
-generated_predictions.jsonl
+*generated_predictions.jsonl
 predictions_score.json
