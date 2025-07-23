@@ -38,6 +38,10 @@ import pickle
 import time
 
 from utils.tcp_recver import CommandImageReceiver
+# import cv2
+# import imageio
+from PIL import Image
+import os
 
 
 if is_vllm_available():
@@ -176,11 +180,13 @@ def _regularize_images(self, images: list["ImageInput"], **kwargs) -> dict[str, 
 
         return {"images": results}
 
-def template_and_tokenrize(prompt, images,data_args,
-    template: "Template",
-    tokenizer: "PreTrainedTokenizer",
-    processor: Optional["ProcessorMixin"] = None 
-    ):
+def template_and_tokenrize(prompt, 
+                           images,
+                           data_args,
+                           template: "Template",
+                           tokenizer: "PreTrainedTokenizer",
+                           processor: Optional["ProcessorMixin"] = None 
+                          ):
     
     # {'_prompt': [{'content': 'Imagine you are a robot programmed for navigation tasks. You have given current observation: <image>. Your assigned task is: "Walk towards the white bookshelf. Turn left at the white bookshelf. Stop in between the two tables. ". Analyze this series of images to decide your next move, which could involve turning left or right by a specific degree, moving forward a certain distance, or stop if task is completed.', 'role': 'user'}], '_response': [{'content': 'turn right 45 degrees', 'role': 'assistant'}], '_system': '', '_tools': '', '_images': ['r2r_train_320/9224/9224_0.jpg'], '_videos': None, '_audios': None}
     
@@ -192,20 +198,27 @@ def template_and_tokenrize(prompt, images,data_args,
     system = ""
     tools = ""      
     
-    print(messages)
+    # print(messages)
     messages = template.mm_plugin.process_messages(messages, images, videos, audios, processor)
     print(messages)
     input_ids, labels = template.encode_oneturn(tokenizer, messages, system, tools)
+    # print(input_ids)
     if template.efficient_eos:
         labels += [tokenizer.eos_token_id]
 
     input_ids, _ = template.mm_plugin.process_token_ids(
         input_ids, None, images, videos, audios, tokenizer, processor
     )
+    # print(input_ids)
     source_len, target_len = infer_seqlen(len(input_ids), len(labels), data_args.cutoff_len)
     input_ids = input_ids[:source_len]
     # labels = labels[:target_len]
     return input_ids, labels
+
+# 线性等距采样-- 当n大于2时，会取首尾，中间线性等距采样，
+def uniform_sample(arr, n):
+    indices = np.linspace(0, len(arr)-1, n, dtype=int)  # 生成均匀分布的索引
+    return [arr[i] for i in indices]
 
 def vllm_infer(
     model_name_or_path: str,
@@ -230,6 +243,7 @@ def vllm_infer(
     video_fps: float = 2.0,
     video_maxlen: int = 128,
     batch_size: int = 16,
+    max_image_buffer_size = 10,
     # condition = None,
 ):
     r"""Perform batch generation using vLLM engine, which supports tensor parallelism.
@@ -284,7 +298,8 @@ def vllm_infer(
     engine_args["mm_processor_kwargs"]={
             "min_pixels": 2 * 2 * 28 * 28,
             # "max_pixels": 320 * 320 * 28 * 28
-            "max_pixels": 320 * 320
+            # "max_pixels": 320 * 320
+            "max_pixels": 424 * 240
         }
 
     if isinstance(model_args.vllm_config, dict):
@@ -319,56 +334,96 @@ def vllm_infer(
     
     infer_data_save_dir = "/LLM-VLM/infer_data_bak" 
     
+    image_buffer_list = []
+    max_image_buffer_size = 10
+    
+    save_time_stamp = time.strftime("%Y%m%d-%H%M%S", time.localtime())
+    save_dir = f"{infer_data_save_dir}/{save_time_stamp}"
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+        
+    infer_count = 0
+    image_count = 0
+    save_data_flag = True
+    infer_round_dir = ''
+    
+    # 注意以下分辨率处理
     while True:
+        vllm_inputs, prompts, labels = [], [], []
+        
         images, command = receiver.get_next_command_image()
-        
-        print("recv cmd and images: ", command,len(images))
-        
+        print("recv cmd and images: ", command, len(images))
         if command != None:
             current_instruction = command
+            image_buffer_list.clear()
+            
+            if (save_data_flag == True):
+                infer_count += 1
+                infer_round_dir = f"{save_dir}/infer_round_{infer_count}"
+                if not os.path.exists(infer_round_dir):
+                    os.makedirs(infer_round_dir)
+                image_count = 0
+                
+        for i in range(len(images)):
+            image_buffer_list.append(images[i])
+            
+            if (save_data_flag == True):
+                image_path = f"{infer_round_dir}/image_{image_count}.jpg"
+                pil_image = Image.fromarray(images[i])
+                pil_image.save(image_path)
+                # image_bgr = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+                # cv2.imwrite(image_path, image_bgr)
+                image_count +=1
+            
+        # while(len(image_buffer_list) > max_image_buffer_size):
+        #     image_buffer_list.pop(0)
         
-        vllm_inputs, prompts, labels = [], [], []
+        input_image_buffer = []
+        if len(image_buffer_list) <= max_image_buffer_size:
+            input_image_buffer = image_buffer_list
+        else:
+            # 线性等距采样
+            input_image_buffer = uniform_sample(image_buffer_list, max_image_buffer_size)
         
         # 参考 https://docs.vllm.ai/en/latest/api/vllm/multimodal/inputs.html#vllm.multimodal.inputs.HfImageItem
         # 输入格式支持 PIL.Image, ndarray, torch.Tensor.
+        multi_modal_data = {"image": input_image_buffer}
         
-        # multi_modal_data = {"image": template_obj.mm_plugin._regularize_images(image_list, image_max_pixels=image_max_pixels, image_min_pixels=image_min_pixels)["images"]}
-        multi_modal_data = {"image": images}
-        
-        # prompt = generage_prompt(images, current_instruction)
-        prompt = generage_prompt_with_aciton(images, current_instruction)
-        
-        print(prompt)
-        # 保存prompt数据和图像数据保存数据到本地
-        
+        prompt = generage_prompt_with_aciton(input_image_buffer, current_instruction)
         
         # 在这里引入 tokenizer， 参考 loader 里的 _get_preprocessed_dataset，， 首先用 prompt构建 dataset类，然后扔进去应该就行。参考之前的dataset构建，构建一个一样的 应该就行，
         # 打印一下之前的dataset中某一条，保证整体结构的情况下，在这里生成一条一样的应该就行
-        input_ids,labels = template_and_tokenrize(prompt, images, data_args, template_obj ,**tokenizer_module)
+        input_ids, labels = template_and_tokenrize(prompt, input_image_buffer, data_args, template_obj ,**tokenizer_module)
+        
+        print(tokenizer.decode(input_ids))
+        exit()
+        
         vllm_inputs.append({"prompt_token_ids": input_ids, "multi_modal_data": multi_modal_data})
         
         results = llm.generate(vllm_inputs, sampling_params, lora_request=lora_request)
-        
-        # print(results)
 
         preds = [result.outputs[0].text for result in results]
         
         receiver._send_response(True, preds[0])
         
         history_action_list.append(preds[0])
-        if len(history_action_list) > 5:
+        if len(history_action_list) > 1:
             history_action_list.pop(0)
-        
-        # receiver._send_response(True, "move forward 0.75 meter")
-        
-        
-        
-        # send_action_str("move forward 0.75 meter", '127.0.0.1', 8866)
         
         # with open(save_name, "a", encoding="utf-8") as f:
         #     for text, pred, label in zip(prompts, preds, labels):
         #         f.write(json.dumps({"prompt": text, "predict": pred, "label": label}, ensure_ascii=False) + "\n")
-
+        
+        # for i in range(len(image_buffer_list)):
+        #     # 判断图像分辨率，如果分辨率不是 112x56， 则进行缩放
+        #     if image_buffer_list[i].shape[1] != 112 or image_buffer_list[i].shape[0] != 56:
+        #         pil_img = Image.fromarray(image_buffer_list[i])
+        #         pil_img_resized = pil_img.resize((112, 56), resample=Image.LANCZOS)
+        #         # pil_img_resized = pil_img.resize((112, 56), Image.Resampling.BICUBIC)
+        #         scaled_image = np.array(pil_img_resized)
+        #         image_buffer_list[i] = scaled_image
+        
+        
         
 if __name__ == "__main__":
     
@@ -389,9 +444,16 @@ if __name__ == "__main__":
         help="template",
     )
     
+    parser.add_argument(
+        "--max_image_buffer_size",
+        type=int,
+        required=True,
+        help="max_image_buffer_size",
+    )
+    
     args = parser.parse_args()
     
-    vllm_infer(model_name_or_path = args.model_name_or_path, template=args.template)
+    vllm_infer(model_name_or_path = args.model_name_or_path, template=args.template, max_image_buffer_size=args.max_image_buffer_size)
     
     
     # vllm_infer(model_name_or_path="/LLM-VLM/train_saves/R2R-240-5-20epoch-20250612/qwen2_vl-3b/outputs", template = "qwen2_vl", dataset ="r2r_train_240_5")

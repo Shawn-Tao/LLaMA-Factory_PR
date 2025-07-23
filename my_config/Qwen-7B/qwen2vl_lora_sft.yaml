@@ -21,12 +21,17 @@ deepspeed: examples/deepspeed/ds_z2_config.json
 # dataset: r2r_train_320_7
 # dataset: r2r_train_240_10
 # dataset: r2r_train_240_5
-dataset: r2r_train_424_240_9,rxr_train_424_240_9
+# dataset: r2r_train_424_240_9,rxr_train_424_240_9
+# dataset: r2r_train_424_240_add_112_56_his_9
+# dataset: r2r_train_424_240_add_112_56_his_9_last_action
+dataset: r2r_train_424_240_9
 template: qwen2_vl
 # cutoff_len: 2048
 # 参考：https://github.com/hiyouga/LLaMA-Factory/issues/6844
 cutoff_len: 4096
-max_samples: 1000
+# max_samples: 1000
+# max_samples: 334259
+max_samples: 3342590
 overwrite_cache: true
 # preprocessing_num_workers: 16
 preprocessing_num_workers: 64
@@ -37,7 +42,8 @@ output_dir: saves/qwen2_vl-7b/lora/sft
 logging_steps: 10
 # save_steps: 500
 # save_steps: 200
-save_steps: 40
+# save_steps: 40
+save_steps: 10
 plot_loss: true
 overwrite_output_dir: true
 save_only_model: false
@@ -49,7 +55,7 @@ per_device_train_batch_size: 1
 gradient_accumulation_steps: 6
 # gradient_accumulation_steps: 2
 learning_rate: 1.0e-4
-num_train_epochs: 10.0
+num_train_epochs: 12.0
 # num_train_epochs: 1.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
@@ -57,6 +63,7 @@ warmup_ratio: 0.1
 bf16: false
 ddp_timeout: 180000000
 resume_from_checkpoint: null
+
 
 ### eval
 # val_size: 0.1
