@@ -1,0 +1,12 @@
+### model
+model_name_or_path: /LLM-VLM/train_saves/Qwen2.5-VL-3b-424-240-9-r2r-fulldatasets-more-stop-0804/outputs-4642
+template: qwen2_vl
+trust_remote_code: true
+
+### export
+export_dir: /LLM-VLM/train_saves/Qwen2.5-VL-3b-424-240-9-r2r-fulldatasets-more-stop-0804/outputs-4642-gptq
+export_quantization_bit: 8
+export_quantization_dataset: data/c4_demo.jsonl
+export_size: 5
+export_device: cpu  # choices: [cpu, auto]
+export_legacy_format: false

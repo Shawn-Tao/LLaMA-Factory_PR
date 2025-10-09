@@ -1,6 +1,7 @@
 ### model
 # model_name_or_path: Qwen/Qwen2.5-VL-3B-Instruct-AWQ
-model_name_or_path: Qwen/Qwen2.5-VL-3B-Instruct
+# model_name_or_path: Qwen/Qwen2.5-VL-3B-Instruct
+model_name_or_path: /LLM-VLM/train_saves/Qwen2.5-VL-3b-424-240-9-r2r-fulldatasets-0721/outputs-4642
 # image_max_pixels: 262144
 image_max_pixels: 101800
 # video_max_pixels: 16384
@@ -15,10 +16,10 @@ lora_rank: 8
 lora_target: all
 
 # deepspeed fei offload
-deepspeed: examples/deepspeed/ds_z3_config.json 
+# deepspeed: examples/deepspeed/ds_z3_config.json 
 
 # kaiqi offload
-# deepspeed: examples/deepspeed/ds_z3_offload_config.json 
+deepspeed: examples/deepspeed/ds_z3_offload_config.json 
 
 # use_unsloth
 
@@ -29,7 +30,7 @@ deepspeed: examples/deepspeed/ds_z3_config.json
 # dataset: r2r_train_240_10
 # dataset: r2r_train_240_5
 # dataset: r2r_train_424_240_9
-dataset: r2r_train_424_240_9_more_stop_1p6,co_train_r2r_rl_train_424_240_more_stop
+dataset: r2r_train_424_240_9_more_stop_1p6
 template: qwen2_vl
 cutoff_len: 2048
 # 参考：https://github.com/hiyouga/LLaMA-Factory/issues/6844
@@ -47,7 +48,7 @@ tokenized_path: saves/qwen2_vl-3b/dataset/sft
 output_dir: saves/qwen2_vl-3b/lora/sft
 logging_steps: 10
 # save_steps: 500
-save_steps: 50
+save_steps: 10
 plot_loss: true
 overwrite_output_dir: true
 save_only_model: false
@@ -68,7 +69,6 @@ fp16: true
 
 ddp_timeout: 180000000
 resume_from_checkpoint: null
-
 
 gradient_checkpointing: true
 freeze_vision_tower : true
