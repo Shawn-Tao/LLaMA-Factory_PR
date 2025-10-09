@@ -395,8 +395,8 @@ def vllm_infer(
         # 打印一下之前的dataset中某一条，保证整体结构的情况下，在这里生成一条一样的应该就行
         input_ids, labels = template_and_tokenrize(prompt, input_image_buffer, data_args, template_obj ,**tokenizer_module)
         
-        print(tokenizer.decode(input_ids))
-        exit()
+        # print(tokenizer.decode(input_ids))
+        # exit()
         
         vllm_inputs.append({"prompt_token_ids": input_ids, "multi_modal_data": multi_modal_data})
         
