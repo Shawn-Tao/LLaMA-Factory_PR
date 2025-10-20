@@ -253,6 +253,7 @@ class CustomPPOTrainer(PPOTrainer, Trainer):
 
             # Run PPO step
             self.model.train()
+            # !self.step 是trl父类中的函数，应该会调用batched_forward_pass
             stats = self.step(queries, responses, rewards)
             self.tokenizer.padding_side = "left"  # restore padding side
             loss_meter.update(float(stats["ppo/loss/total"]), n=len(rewards))
@@ -407,6 +408,8 @@ class CustomPPOTrainer(PPOTrainer, Trainer):
         rewards = values.gather(dim=-1, index=(batch["attention_mask"].sum(dim=-1, keepdim=True) - 1))
         return rewards.float().detach()  # use fp32 type
 
+    # ! 核心函数
+
     @override
     @PPODecorators.empty_device_cache()
     def batched_forward_pass(
@@ -438,6 +441,8 @@ class CustomPPOTrainer(PPOTrainer, Trainer):
             input_ids = input_kwargs["input_ids"]
             attention_mask = input_kwargs["attention_mask"]
 
+            # ! value是critic——head输出的每个token的value估计。
+            # ! 优势函数计算在trl中的父类 ppotrainer.step中实现
             with self.amp_context:  # support bf16
                 logits, _, values = model(**input_kwargs, return_dict=True, use_cache=False)
 

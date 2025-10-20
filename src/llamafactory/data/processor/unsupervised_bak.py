@@ -37,10 +37,6 @@ class UnsupervisedDatasetProcessor(DatasetProcessor):
         images: list["ImageInput"],
         videos: list["VideoInput"],
         audios: list["AudioInput"],
-        # goal_position: list[float,float,float],
-        # distance_to_goal: list[float],
-        # agent_position: list[float,float,float],
-        # agent_heading: list[float],
     ) -> tuple[list[int], list[int]]:
         if len(response) == 1:
             messages = prompt + response
@@ -63,7 +59,13 @@ class UnsupervisedDatasetProcessor(DatasetProcessor):
     def preprocess_dataset(self, examples: dict[str, list[Any]]) -> dict[str, list[Any]]:
         # build inputs with format `<bos> X` and labels with format `Y <eos>`
         model_inputs = defaultdict(list)
+        print(examples)
+        exit()
+        
+
         for i in range(len(examples["_prompt"])):
+            # print(examples)
+            # exit()
             if len(examples["_prompt"][i]) % 2 != 1:
                 logger.warning_rank0(
                     "Dropped invalid example: {}".format(examples["_prompt"][i] + examples["_response"][i])
@@ -86,10 +88,6 @@ class UnsupervisedDatasetProcessor(DatasetProcessor):
             model_inputs["images"].append(examples["_images"][i])
             model_inputs["videos"].append(examples["_videos"][i])
             model_inputs["audios"].append(examples["_audios"][i])
-            model_inputs["goal_position"].append(examples["goal_position"][i])
-            model_inputs["distance_to_goal"].append(examples["distance_to_goal"][i])
-            model_inputs["agent_position"].append(examples["agent_position"][i])
-            model_inputs["agent_heading"].append(examples["agent_heading"][i])
 
         return model_inputs
 
@@ -99,7 +97,3 @@ class UnsupervisedDatasetProcessor(DatasetProcessor):
         print("inputs:\n{}".format(self.tokenizer.decode(example["input_ids"], skip_special_tokens=False)))
         print("label_ids:\n{}".format(example["labels"]))
         print("labels:\n{}".format(self.tokenizer.decode(example["labels"], skip_special_tokens=False)))
-        print("goal_position:\n{}".format(example["goal_position"]))
-        print("distance_to_goal:\n{}".format(example["distance_to_goal"]))
-        print("agent_position:\n{}".format(example["agent_position"]))
-        print("agent_heading:\n{}".format(example["agent_heading"]))

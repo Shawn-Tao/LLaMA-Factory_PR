@@ -38,6 +38,21 @@
       "assistant_tag": "assistant"
     }
   },
+  "r2r_sample": {
+    "file_name": "r2r_sample.jsonl",
+    "formatting": "vln",
+    "columns": {
+      "messages": "conversations",
+      "images": "image",
+      "agent_position": "agent_position"
+    },
+    "tags": {
+      "role_tag": "from",
+      "content_tag": "value",
+      "user_tag": "human",
+      "assistant_tag": "gpt"
+    }
+  },
   "mllm_audio_demo": {
     "file_name": "mllm_audio_demo.json",
     "formatting": "sharegpt",

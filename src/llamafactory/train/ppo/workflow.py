@@ -43,6 +43,12 @@ def run_ppo(
     tokenizer = tokenizer_module["tokenizer"]
     template = get_template_and_fix_tokenizer(tokenizer, data_args)
     dataset_module = get_dataset(template, model_args, data_args, training_args, stage="ppo", **tokenizer_module)
+
+    print(dataset_module)
+    # 打印其中的第一条数据
+    print(dataset_module['train_dataset'][0])
+    exit()
+
     model = load_model(tokenizer, model_args, finetuning_args, training_args.do_train, add_valuehead=True)
 
     tokenizer.padding_side = "left"  # use left-padding in generation while using right-padding in training

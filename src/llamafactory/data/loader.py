@@ -128,6 +128,9 @@ def _load_single_dataset(
     elif dataset_attr.load_from == "cloud_file":
         dataset = Dataset.from_list(read_cloud_json(data_path), split=dataset_attr.split)
     else:
+        # print("load")
+        # exit()
+        # ! 从本地读取文件的话，是调用的这里的load_dataset
         dataset = load_dataset(
             path=data_path,
             name=data_name,
@@ -142,6 +145,10 @@ def _load_single_dataset(
         )
         if data_args.streaming and dataset_attr.load_from == "file":
             dataset = dataset.to_iterable_dataset(num_shards=training_args.dataloader_num_workers)
+        
+        # ! 这里还是正确的，能够把数据文件读取进
+        # print(dataset)
+        # exit()
 
     if dataset_attr.num_samples is not None and not data_args.streaming:
         target_num = dataset_attr.num_samples
@@ -312,9 +319,9 @@ def get_dataset(
         )
 
     with training_args.main_process_first(desc="pre-process dataset", local=(not data_args.data_shared_file_system)):
-        dataset = _get_preprocessed_dataset(
-            dataset, data_args, training_args, stage, template, tokenizer, processor, is_eval=False
-        )
+        dataset = _get_preprocessed_dataset(dataset, data_args, training_args, stage, template, tokenizer, processor, is_eval=False)
+        # print(dataset)
+        
         if isinstance(eval_dataset, dict):
             for eval_name, eval_data in eval_dataset.items():
                 eval_dataset[eval_name] = _get_preprocessed_dataset(
