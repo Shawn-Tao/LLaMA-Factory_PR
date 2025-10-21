@@ -44,11 +44,14 @@ def run_ppo(
     template = get_template_and_fix_tokenizer(tokenizer, data_args)
     dataset_module = get_dataset(template, model_args, data_args, training_args, stage="ppo", **tokenizer_module)
 
-    print(dataset_module)
-    # 打印其中的第一条数据
-    print(dataset_module['train_dataset'][0])
-    exit()
+    # print(dataset_module)
+    # # 打印其中的第一条数据
+    # print(dataset_module['train_dataset'][0])
+    # print()
+    # exit()
 
+    # ! finetuning_args.reward_model_type is lora!!!!!!!
+    
     model = load_model(tokenizer, model_args, finetuning_args, training_args.do_train, add_valuehead=True)
 
     tokenizer.padding_side = "left"  # use left-padding in generation while using right-padding in training
@@ -56,7 +59,7 @@ def run_ppo(
 
     # Create reference model and reward model
     ref_model = create_ref_model(model_args, finetuning_args, add_valuehead=True)
-    reward_model = create_reward_model(model, model_args, finetuning_args)
+    # reward_model = create_reward_model(model, model_args, finetuning_args)
 
     # Initialize our Trainer
     ppo_trainer: CustomPPOTrainer = CustomPPOTrainer(

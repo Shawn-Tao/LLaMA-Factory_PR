@@ -60,7 +60,7 @@ if TYPE_CHECKING:
 
 logger = logging.get_logger(__name__)
 
-
+# ! finetuning_args.reward_model_type is lora!!!!!!!
 class CustomPPOTrainer(PPOTrainer, Trainer):
     r"""Inherit PPOTrainer."""
 
@@ -235,6 +235,9 @@ class CustomPPOTrainer(PPOTrainer, Trainer):
             except StopIteration:
                 dataiter = iter(self.dataloader)
                 batch = next(dataiter)
+                
+            print(batch)
+            exit()
 
             # Get inputs
             self.model.eval()
@@ -404,6 +407,9 @@ class CustomPPOTrainer(PPOTrainer, Trainer):
 
         if self.finetuning_args.reward_model_type == "lora":
             replace_model(unwrapped_model, target="default")
+            
+        if self.finetuning_args.reward_model_type == "vln":
+            
 
         rewards = values.gather(dim=-1, index=(batch["attention_mask"].sum(dim=-1, keepdim=True) - 1))
         return rewards.float().detach()  # use fp32 type
