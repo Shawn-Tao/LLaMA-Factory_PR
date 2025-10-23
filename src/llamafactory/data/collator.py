@@ -261,9 +261,7 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
         # fake 字段的作用是：在分布式多模态训练中，通过注入无害的虚拟模态数据，强制所有 GPU 执行一致的计算和通信路径，从而避免因条件分支导致的进程挂起（hang）问题。     
         
         fake_input_ids = []
-        if (
-            self.template.mm_plugin.image_token is not None and sum(batch_imglens) == 0 and sum(batch_vidlens) == 0
-        ):  # avoid process hanging in zero3/fsdp case
+        if (self.template.mm_plugin.image_token is not None and sum(batch_imglens) == 0 and sum(batch_vidlens) == 0):  # avoid process hanging in zero3/fsdp case
             fake_messages = [{"role": "user", "content": IMAGE_PLACEHOLDER}]
             fake_images = [Image.new("RGB", (64, 64), (255, 255, 255))]
             fake_messages = self.template.mm_plugin.process_messages(
@@ -277,9 +275,7 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
             batch_images = fake_images
             batch_imglens[0] = 1
 
-        if (
-            self.template.mm_plugin.audio_token is not None and sum(batch_audlens) == 0
-        ):  # avoid process hanging in zero3/fsdp case
+        if (self.template.mm_plugin.audio_token is not None and sum(batch_audlens) == 0):  # avoid process hanging in zero3/fsdp case
             fake_messages = [{"role": "user", "content": AUDIO_PLACEHOLDER}]
             fake_audios = [np.zeros(1600)]
             fake_messages = self.template.mm_plugin.process_messages(
@@ -322,11 +318,11 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
                 
         # !为了避免VLN特权信息随着以下函数调用 tokenizer.pad 导致的无法直接tensor化和对齐的问题，在这里先把相关数据拿出来，等padding完了再放回去。
         
-        # ✅ 新增：分离非tokenizer字段
-        extra_fields = {}
-        for key in list(features[0].keys()):
-            if key not in ["input_ids", "attention_mask", "labels", "token_type_ids", "position_ids"]:
-                extra_fields[key] = [f.pop(key) for f in features]
+        # # ✅ 新增：分离非tokenizer字段
+        # extra_fields = {}
+        # for key in list(features[0].keys()):
+        #     if key not in ["input_ids", "attention_mask", "labels"]:
+        #         extra_fields[key] = [f.pop(key) for f in features]
                 
         # print("features[0].keys():", features[0].keys())
         # print("features[0]:", features[0])
@@ -334,14 +330,15 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
 
         features: dict[str, torch.Tensor] = super().__call__(features)
         
-        # ✅ 把这些字段再加回去
-        for k, v in extra_fields.items():
-            try:
-                features[k] = torch.tensor(v)
-            except Exception:
-                features[k] = v
+        # # ✅ 把这些字段再加回去
+        # for k, v in extra_fields.items():
+        #     try:
+        #         features[k] = torch.tensor(v)
+        #     except Exception:
+        #         features[k] = v
 
         if self.get_rope_func is not None:
+            print("*************************get_rope_func")
             rope_index_kwargs = {
                 "input_ids": features["input_ids"],
                 "image_grid_thw": mm_inputs.get("image_grid_thw"),
@@ -366,6 +363,8 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
                 ).unsqueeze(-1)
             else:  # for qwen2vl
                 features["position_ids"], features["rope_deltas"] = self.get_rope_func(**rope_index_kwargs)
+        else:
+            print("************************no rope func")
 
         if (
             self.model is not None
