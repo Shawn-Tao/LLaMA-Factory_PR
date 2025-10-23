@@ -228,15 +228,27 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
         if self.template is None:
             raise ValueError("Template is required for MultiModalDataCollator.")
 
+        print(type(self.model))
+        print(hasattr(self.model, "get_rope_index"))
+        print(hasattr(self.model.model, "get_rope_index"))
+        print(self.model.config.model_type)
+        print(getattr(self.model.config, "mrope", None))
+        exit()
+        
         if isinstance(self.model, PeftModel):
             self.model = self.model.base_model.model
 
         if self.model is not None and hasattr(self.model, "get_rope_index"):  # for qwen2vl mrope
+            print("********************1")
             self.get_rope_func = self.model.get_rope_index  # transformers < 4.52.0 or qwen2.5 omni
         elif self.model is not None and hasattr(self.model, "model") and hasattr(self.model.model, "get_rope_index"):
+            print("********************2")
             self.get_rope_func = self.model.model.get_rope_index  # transformers >= 4.52.0
         else:
+            print("********************3")
             self.get_rope_func = None
+            
+        exit()
 
     def __call__(self, features: list[dict[str, Any]]) -> dict[str, "torch.Tensor"]:
         batch_images, batch_videos, batch_audios = [], [], []
