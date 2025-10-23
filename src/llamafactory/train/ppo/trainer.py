@@ -43,6 +43,10 @@ from ..callbacks import FixValueHeadModelCallback, SaveProcessorCallback
 from ..trainer_utils import create_custom_optimizer, create_custom_scheduler
 from .ppo_utils import dump_layernorm, get_rewards_from_server, replace_model, restore_layernorm
 
+import torch
+from typing import Callable, List, Optional, Union
+from datasets import Dataset, load_dataset, load_from_disk
+
 
 if TYPE_CHECKING:
     from datasets import Dataset
@@ -60,8 +64,24 @@ if TYPE_CHECKING:
 
 logger = logging.get_logger(__name__)
 
+# ! 这个函数是罪魁祸首，调用了_remove_unused_columns函数，在最新版的trl中已经没有这个函数了，但是llama-factory依赖的是0.9.6版本的trl。
+# ! 这里通过继承PPOTrainer并重写prepare_dataloader函数来避免调用_remove_unused_columns函数。
+class VLPPOTrainer(PPOTrainer):
+     def prepare_dataloader(self, dataset: Union[torch.utils.data.Dataset, Dataset], data_collator=None):
+        # if isinstance(dataset, Dataset):
+        #     dataset = self._remove_unused_columns(dataset)
+        dataloader = torch.utils.data.DataLoader(
+            dataset,
+            batch_size=self.config.batch_size,
+            collate_fn=data_collator,
+            shuffle=True,
+            drop_last=True,
+        )
+        return dataloader
+
 # ! finetuning_args.reward_model_type is lora!!!!!!!
-class CustomPPOTrainer(PPOTrainer, Trainer):
+# class CustomPPOTrainer(PPOTrainer, Trainer):
+class CustomPPOTrainer(VLPPOTrainer, Trainer):
     r"""Inherit PPOTrainer."""
 
     def __init__(
@@ -124,8 +144,10 @@ class CustomPPOTrainer(PPOTrainer, Trainer):
 
         optimizer = self.create_optimizer(model, training_args, finetuning_args)
         scheduler = self.create_scheduler(training_args, num_training_steps, optimizer)
-
-        PPOTrainer.__init__(
+        
+        # 这里生成了 self.dataloader.
+        # ! trl 0.9.6版本中，会主动调用一个prepare_dataloader函数，会压缩数据集字段
+        VLPPOTrainer.__init__(
             self,
             config=ppo_config,
             model=model,
@@ -136,7 +158,6 @@ class CustomPPOTrainer(PPOTrainer, Trainer):
             data_collator=data_collator,
             lr_scheduler=scheduler,
         )
-
         self.args = training_args
         self.model_args = model_args
         self.finetuning_args = finetuning_args
@@ -223,7 +244,8 @@ class CustomPPOTrainer(PPOTrainer, Trainer):
         logger.info_rank0(f"  Num optimization epochs per batch = {self.finetuning_args.ppo_epochs:,}")
         logger.info_rank0(f"  Total training steps = {max_steps:,}")
         logger.info_rank0(f"  Number of trainable parameters = {count_parameters(self.model)[0]:,}")
-
+        
+        # ! dataloader调用了上文中的data_collator
         dataiter = iter(self.dataloader)
         loss_meter = AverageMeter()
         reward_meter = AverageMeter()
@@ -231,12 +253,13 @@ class CustomPPOTrainer(PPOTrainer, Trainer):
 
         for step in tqdm(range(max_steps), disable=not self.is_local_process_zero()):
             try:
+                # ! 这里会出点问题，需要改collator代码
                 batch = next(dataiter)
             except StopIteration:
                 dataiter = iter(self.dataloader)
                 batch = next(dataiter)
                 
-            print(batch)
+            print("batch:", batch)
             exit()
 
             # Get inputs
@@ -408,7 +431,8 @@ class CustomPPOTrainer(PPOTrainer, Trainer):
         if self.finetuning_args.reward_model_type == "lora":
             replace_model(unwrapped_model, target="default")
             
-        if self.finetuning_args.reward_model_type == "vln":
+        # if self.finetuning_args.reward_model_type == "vln":
+        #     pass
             
 
         rewards = values.gather(dim=-1, index=(batch["attention_mask"].sum(dim=-1, keepdim=True) - 1))

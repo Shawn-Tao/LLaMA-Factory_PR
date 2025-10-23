@@ -18,6 +18,7 @@ from .pretrain import PretrainDatasetProcessor
 from .processor_utils import DatasetProcessor
 from .supervised import PackedSupervisedDatasetProcessor, SupervisedDatasetProcessor
 from .unsupervised import UnsupervisedDatasetProcessor
+from .unsupervised import PPO_VLNDatasetProcessor
 
 
 __all__ = [
@@ -28,4 +29,5 @@ __all__ = [
     "PretrainDatasetProcessor",
     "SupervisedDatasetProcessor",
     "UnsupervisedDatasetProcessor",
+    "PPO_VLNDatasetProcessor",
 ]

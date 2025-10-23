@@ -31,6 +31,7 @@ from .processor import (
     PretrainDatasetProcessor,
     SupervisedDatasetProcessor,
     UnsupervisedDatasetProcessor,
+    PPO_VLNDatasetProcessor,
 )
 
 
@@ -228,6 +229,8 @@ def _get_dataset_processor(
         dataset_processor_class = PairwiseDatasetProcessor
     elif stage == "kto":
         dataset_processor_class = FeedbackDatasetProcessor
+    elif stage == "ppo":
+        dataset_processor_class = PPO_VLNDatasetProcessor
     else:
         dataset_processor_class = UnsupervisedDatasetProcessor
 
