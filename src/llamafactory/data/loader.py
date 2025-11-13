@@ -270,7 +270,6 @@ def _get_preprocessed_dataset(
         remove_columns=column_names,
         **kwargs,
     )
-
     if training_args.should_log:
         try:
             print("eval example:" if is_eval else "training example:")

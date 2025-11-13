@@ -53,6 +53,10 @@ class CustomSeq2SeqTrainer(Seq2SeqTrainer):
         gen_kwargs: Optional[dict[str, Any]] = None,
         **kwargs,
     ) -> None:
+        
+        print("init CustomSeq2SeqTrainer")
+        # exit()
+        
         if is_transformers_version_greater_than("4.46"):
             kwargs["processing_class"] = kwargs.pop("tokenizer")
         else:

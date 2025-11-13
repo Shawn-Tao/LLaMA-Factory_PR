@@ -227,36 +227,20 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
     def __post_init__(self):
         if self.template is None:
             raise ValueError("Template is required for MultiModalDataCollator.")
-
-        print(type(self.model))
-        print(hasattr(self.model, "get_rope_index"))
-        print(hasattr(self.model.model, "get_rope_index"))
-        print(self.model.config.model_type)
-        print(getattr(self.model.config, "mrope", None))
-        exit()
-        
         if isinstance(self.model, PeftModel):
             self.model = self.model.base_model.model
 
         if self.model is not None and hasattr(self.model, "get_rope_index"):  # for qwen2vl mrope
-            print("********************1")
             self.get_rope_func = self.model.get_rope_index  # transformers < 4.52.0 or qwen2.5 omni
         elif self.model is not None and hasattr(self.model, "model") and hasattr(self.model.model, "get_rope_index"):
-            print("********************2")
             self.get_rope_func = self.model.model.get_rope_index  # transformers >= 4.52.0
         else:
-            print("********************3")
             self.get_rope_func = None
-            
-        exit()
 
     def __call__(self, features: list[dict[str, Any]]) -> dict[str, "torch.Tensor"]:
         batch_images, batch_videos, batch_audios = [], [], []
         batch_imglens, batch_vidlens, batch_audlens, batch_input_ids = [], [], [], []
         
-        # ! 这里已经只剩下 input和mask了
-        # print(features)
-        # exit()
         
         for feature in features:
             images = feature.pop("images", None) or []
@@ -350,7 +334,6 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
         #         features[k] = v
 
         if self.get_rope_func is not None:
-            print("*************************get_rope_func")
             rope_index_kwargs = {
                 "input_ids": features["input_ids"],
                 "image_grid_thw": mm_inputs.get("image_grid_thw"),
@@ -375,8 +358,6 @@ class MultiModalDataCollatorForSeq2Seq(DataCollatorForSeq2Seq):
                 ).unsqueeze(-1)
             else:  # for qwen2vl
                 features["position_ids"], features["rope_deltas"] = self.get_rope_func(**rope_index_kwargs)
-        else:
-            print("************************no rope func")
 
         if (
             self.model is not None

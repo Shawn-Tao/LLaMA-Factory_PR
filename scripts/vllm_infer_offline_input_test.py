@@ -126,7 +126,7 @@ def vllm_infer(
 
     # load datasets
     # dataset_module = get_dataset(template_obj, model_args, data_args, training_args, "ppo", **tokenizer_module)
-    dataset_module = get_dataset(template_obj, model_args, data_args, training_args, "sft", **tokenizer_module)
+    dataset_module = get_dataset(template_obj, model_args, data_args, training_args, "infer", **tokenizer_module)
     train_dataset = dataset_module["train_dataset"]
 
     sampling_params = SamplingParams(
@@ -151,6 +151,10 @@ def vllm_infer(
     for i in tqdm(range(0, len(train_dataset), batch_size), desc="Processing batched inference"):
         vllm_inputs, prompts, labels = [], [], []
         batch = train_dataset[i : min(i + batch_size, len(train_dataset))]
+        
+        # print(batch["input_ids"][0])
+        # print(">>> decoded input_ids:", tokenizer.decode(batch["input_ids"][0]))
+        # exit()
 
         for j in range(len(batch["input_ids"])):
             if batch["images"][j] is not None:
@@ -189,7 +193,9 @@ def vllm_infer(
                     skip_special_tokens=skip_special_tokens,
                 )
             )
-
+            print(">>> decoded input_ids:", tokenizer.decode(vllm_inputs[j]["prompt_token_ids"]))
+        
+        # exit()
         results = llm.generate(vllm_inputs, sampling_params, lora_request=lora_request)
         preds = [result.outputs[0].text for result in results]
 

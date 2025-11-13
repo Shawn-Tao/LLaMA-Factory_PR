@@ -166,6 +166,20 @@
       "assistant_tag": "assistant"
     }
   },
+  "r2r_train_424_240_9_more_stop_1p6_sample":{
+    "file_name": "r2r_train_424_240_9_more_stop_1p6_sample.json",
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "assistant_tag": "assistant"
+    }
+  },
   "co_train_r2r_rl_train_424_240_more_stop":{
     "file_name": "co_train_r2r_rl_train_424_240_more_stop.json",
     "formatting": "sharegpt",

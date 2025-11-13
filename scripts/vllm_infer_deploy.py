@@ -271,8 +271,6 @@ def vllm_infer(
             repetition_penalty=repetition_penalty,
         )
     )
-    
-    # exit()
 
     training_args = Seq2SeqTrainingArguments(output_dir="dummy_dir")
     tokenizer_module = load_tokenizer(model_args)

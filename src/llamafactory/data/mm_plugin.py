@@ -1526,6 +1526,33 @@ class Qwen2VLPlugin(BasePlugin):
             message["content"] = content
 
         return messages
+    
+    # def get_mm_inputs(
+    #     self,
+    #     images: list["ImageInput"],
+    #     videos: list["VideoInput"],
+    #     audios: list["AudioInput"],
+    #     imglens: list[int],
+    #     vidlens: list[int],
+    #     audlens: list[int],
+    #     batch_ids: list[list[int]],
+    #     processor: Optional["MMProcessor"],
+    # ) -> dict[str, Union[list[int], "torch.Tensor"]]:
+    #     r"""Build batched multimodal inputs for VLMs.
+
+    #     Arguments:
+    #         images: a list of image inputs, shape (num_images,)
+    #         videos: a list of video inputs, shape (num_videos,)
+    #         audios: a list of audio inputs, shape (num_audios,)
+    #         imglens: number of images in each sample, shape (batch_size,)
+    #         vidlens: number of videos in each sample, shape (batch_size,)
+    #         audlens: number of audios in each sample, shape (batch_size,)
+    #         batch_ids: token ids of input samples, shape (batch_size, seq_len)
+    #         processor: a processor for pre-processing images and videos
+
+    #     """
+    #     self._validate_input(processor, images, videos, audios)
+    #     return self._get_mm_inputs(images, videos, audios, processor)
 
 
 @dataclass

@@ -27,6 +27,10 @@ from transformers import (
 )
 from trl import AutoModelForCausalLMWithValueHead
 
+class Qwen2VLWithValueHead(AutoModelForCausalLMWithValueHead):
+    def get_rope_index(self, *args, **kwargs):
+        return self.pretrained_model.get_rope_index(*args, **kwargs)
+
 from ..extras import logging
 from ..extras.misc import count_parameters, skip_check_imports, try_download_model_from_other_hub
 from ..extras.packages import is_transformers_version_greater_than
@@ -191,7 +195,8 @@ def load_model(
     model = init_adapter(config, model, model_args, finetuning_args, is_trainable)
 
     if add_valuehead:
-        model = AutoModelForCausalLMWithValueHead.from_pretrained(model)
+        # model = AutoModelForCausalLMWithValueHead.from_pretrained(model)
+        model = Qwen2VLWithValueHead.from_pretrained(model)
         patch_valuehead_model(model)
 
         if model_args.adapter_name_or_path is not None:

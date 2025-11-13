@@ -1,13 +1,13 @@
 ### model
 # model_name_or_path: Qwen/Qwen2.5-VL-3B-Instruct
 model_name_or_path: /LLM-VLM/train_saves/Qwen2.5-VL-3b-424-240-9-r2r-fulldatasets-0721/outputs-4642
-reward_model: saves/qwen2_vl-3b-ppo/lora/reward
+# reward_model: saves/qwen2_vl-3b-ppo/lora/reward
 image_max_pixels: 101800
 video_max_pixels: 384
 trust_remote_code: true
 
 ### method
-stage: ppo
+stage: sft
 do_train: true
 finetuning_type: lora
 lora_rank: 8
@@ -29,7 +29,7 @@ dataloader_num_workers: 4
 # tokenized_path: saves/qwen2_vl-3b/dataset/sft
 
 ### output
-output_dir: saves/qwen2_vl-3b-ppo/lora/ppo
+output_dir: saves/qwen2_vl-3b-ppo/lora/sft
 logging_steps: 10
 save_steps: 50
 plot_loss: true
@@ -40,7 +40,7 @@ report_to: none
 
 ### train
 per_device_train_batch_size: 1
-gradient_accumulation_steps: 1
+gradient_accumulation_steps: 8
 learning_rate: 1.0e-5
 num_train_epochs: 1.0
 lr_scheduler_type: cosine
@@ -55,6 +55,6 @@ gradient_checkpointing: true
 freeze_vision_tower : true
 
 ### generate
-max_new_tokens: 512
-top_k: 0
-top_p: 0.9
+# max_new_tokens: 512
+# top_k: 0
+# top_p: 0.9
