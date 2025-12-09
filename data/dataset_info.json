@@ -165,6 +165,28 @@
       "assistant_tag": "assistant"
     }
   },
+  "r2r_train_424_240_9_more_stop_1p6_dpo": {
+    "file_name": "r2r_dpo_train_424_240_more_stop.jsonl",
+    "ranking": true,
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "conversations",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    }
+  },
+    "r2r_train_424_240_9_more_stop_1p6_orpo": {
+    "file_name": "20251201_r2r_orpo_train_424_240_more_stop_tau6.json",
+    "ranking": true,
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "conversations",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    }
+  },
   "rxr_train_424_240_9": {
     "file_name": "rxr_train_424_240_9.json",
     "formatting": "sharegpt",

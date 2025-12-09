@@ -1,0 +1,83 @@
+### model
+# model_name_or_path: Qwen/Qwen2.5-VL-3B-Instruct
+model_name_or_path: /LLM-VLM/train_saves/Qwen2.5-VL-3b-424-240-9-r2r-fulldatasets-0721/outputs-4642
+# image_max_pixels: 262144
+image_max_pixels: 101800
+# video_max_pixels: 16384
+video_max_pixels: 384
+trust_remote_code: true
+
+use_unsloth: true
+use_unsloth_gc: true
+# enable_liger_kernel: True
+enable_liger_kernel: false
+
+### method
+stage: dpo
+do_train: true
+finetuning_type: lora
+lora_rank: 8
+lora_target: all
+
+# # dpo 好损失中的 beta 参数。
+# pref_beta: 0.1
+# # DPO sft loss 系数
+# pref_ftx : 0.0
+# 使用的偏好损失类型
+# pref_loss: sigmoid choices: [sigmoid (dpo), orpo, simpo]
+
+# 使用的偏好损失类型
+# pref_loss: sigmoid  # choices: [sigmoid (dpo), orpo, simpo]
+
+
+# 看源码，这个beta 就是 orpo的(OR) orpo_loss = sft_loss + self.beta * odds_ratio_loss
+pref_beta: 0.1
+pref_loss: orpo  # choices: [sigmoid (dpo), orpo, simpo]
+
+# deepspeed fei offload
+# deepspeed: examples/deepspeed/ds_z3_config.json 
+# deepspeed: examples/deepspeed/ds_z3_offload_config.json 
+
+### dataset
+# dataset: rlhf_v
+dataset: r2r_train_424_240_9_more_stop_1p6_orpo # dpo_en_demo
+template: qwen2_vl
+cutoff_len: 2048
+max_samples: 500000
+overwrite_cache: true
+preprocessing_num_workers: 16
+dataloader_num_workers: 4
+# 保存预处理数据集，能省很多时间
+tokenized_path: saves/qwen2_5vl_3b/dataset/orpo
+
+### output
+output_dir: saves/qwen2_5vl_3b/lora/orpo
+logging_steps: 10
+save_steps: 50
+plot_loss: true
+overwrite_output_dir: true
+save_only_model: false
+report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
+
+### train
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 8
+# learning_rate: 5.0e-6
+learning_rate: 1.0e-5
+num_train_epochs: 1.0
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+bf16: false
+fp16: true
+
+ddp_timeout: 180000000
+resume_from_checkpoint: null
+
+gradient_checkpointing: true
+freeze_vision_tower : true
+
+### eval
+# val_size: 0.1
+# per_device_eval_batch_size: 1
+# eval_strategy: steps
+# eval_steps: 500

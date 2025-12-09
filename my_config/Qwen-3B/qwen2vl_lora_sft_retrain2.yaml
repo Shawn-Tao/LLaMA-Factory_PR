@@ -42,10 +42,10 @@ overwrite_cache: true
 preprocessing_num_workers: 32
 dataloader_num_workers: 4
 # 保存预处理数据集，能省很多时间
-tokenized_path: saves/qwen2_vl-3b/dataset/sft
+tokenized_path: saves/qwen2_5_vl-3b/dataset/sft
 
 ### output
-output_dir: saves/qwen2_vl-3b/lora/sft
+output_dir: saves/qwen2_5_vl-3b/lora/sft
 logging_steps: 10
 # save_steps: 500
 save_steps: 10

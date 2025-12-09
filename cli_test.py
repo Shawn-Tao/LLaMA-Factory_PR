@@ -72,6 +72,9 @@ def main():
         export_model()
     elif command == Command.TRAIN:
         force_torchrun = is_env_enabled("FORCE_TORCHRUN")
+        # force_torchrun = 1
+        
+        # print("force_torchrun:",force_torchrun)
         if force_torchrun or (get_device_count() > 1 and not use_ray()):
             nnodes = os.getenv("NNODES", "1")
             node_rank = os.getenv("NODE_RANK", "0")
