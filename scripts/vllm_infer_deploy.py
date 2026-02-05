@@ -54,11 +54,17 @@ if is_vllm_available():
 # template_task_str = f"Your assigned task is: \"<task>\". Analyze this series of images to decide your next move, which could involve turning left or right by a specific degree, moving forward a certain distance, or stop if task is completed."
 
 
-template_header_str = f"You are a robot programmed for navigation tasks. You have given "
-temlpate_history_str = f"serial of historical obervations: <history_image> and "
-template_current_str = f"current observation: <image>. "
-template_last_action_str = f"The sequential action decisions you made earlier are: \"<action>\"."
-template_task_str = f"Your assigned task is: \"<task>\". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or determine that the task is complete and stop."
+# template_header_str = f"You are a robot programmed for navigation tasks. You have given "
+# temlpate_history_str = f"serial of historical obervations: <history_image> and "
+# template_current_str = f"current observation: <image>. "
+# template_last_action_str = f"The sequential action decisions you made earlier are: \"<action>\"."
+# template_task_str = f"Your assigned task is: \"<task>\". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or determine that the task is complete and stop."
+
+template_header_str = f"You are a robot programmed for navigation tasks. You have been given "
+temlpate_history_str = f"a series of historical observations:<history_image> and "
+template_current_str = f"the current observation: <image>. "
+template_last_action_str = f"Your last action is: \"<action>\". "
+template_task_str = f"Your assigned task is: \"<task>\". Analyze the above information and decide your next action: whether to move forward a specific distance, turn left or right by a specific angle, or stop if the task is complete."
 
 history_action_list = []
 

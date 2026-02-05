@@ -1,6 +1,6 @@
 ### model
 # model_name_or_path: Qwen/Qwen2.5-VL-3B-Instruct
-model_name_or_path: /LLM-VLM/train_saves/Qwen2.5-VL-3b-424-240-9-r2r-fulldatasets-0721/outputs-4642
+model_name_or_path: /LLM-VLM/train_saves/Qwen3-VL/qwen3_vl-4b-424-240-9-r2r-fulldatasets-1227/outputs-6964
 # image_max_pixels: 262144
 image_max_pixels: 101800
 # video_max_pixels: 16384
@@ -16,8 +16,15 @@ enable_liger_kernel: false
 stage: dpo
 do_train: true
 finetuning_type: lora
+# lora_rank: 8
+# lora_target: all
+
 lora_rank: 8
-lora_target: all
+lora_alpha: 16
+# lora_target: all
+
+# vision encoder 不调整
+lora_target: q_proj,v_proj,o_proj,gate_proj
 
 # # dpo 好损失中的 beta 参数。
 # pref_beta: 0.1
@@ -40,18 +47,18 @@ pref_loss: orpo  # choices: [sigmoid (dpo), orpo, simpo]
 
 ### dataset
 # dataset: rlhf_v
-dataset: r2r_train_424_240_9_more_stop_1p1_tau3_orpo # dpo_en_demo
-template: qwen2_vl
+dataset: r2r_qwen3vl_orpo_1p1_tau3 # dpo_en_demo
+template: qwen3_vl
 cutoff_len: 2048
 max_samples: 500000
 overwrite_cache: true
-preprocessing_num_workers: 16
+preprocessing_num_workers: 32
 dataloader_num_workers: 4
 # 保存预处理数据集，能省很多时间
-tokenized_path: saves/qwen2_5vl_3b/dataset/orpo
+tokenized_path: saves/qwen3vl_4b/dataset/orpo
 
 ### output
-output_dir: saves/qwen2_5vl_3b/lora/orpo
+output_dir: saves/qwen3vl_4b/lora/orpo
 logging_steps: 10
 save_steps: 50
 plot_loss: true
