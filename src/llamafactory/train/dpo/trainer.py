@@ -290,8 +290,13 @@ class CustomDPOTrainer(DPOTrainer):
         r"""Compute the DPO loss and other metrics for the given batch of inputs for train or test."""
         metrics = {}
         action_dissim = batch.pop("dissim", None)
-        print("action_dissim********************:", action_dissim)
-        exit()
+        # [claude debug]
+        if action_dissim is not None:
+            vals = action_dissim.cpu().detach().numpy()
+            has_dissim = any(v != 1.0 for v in vals)
+            print(f"[claude debug] Trainer: batch_size={len(vals)}, has_non_default={has_dissim}, sample_values={vals[:5]}")
+        else:
+            print("[claude debug] Trainer: action_dissim is None (key not in batch)")
         (
             policy_chosen_logps,
             policy_rejected_logps,

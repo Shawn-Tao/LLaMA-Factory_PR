@@ -131,6 +131,9 @@ class AlpacaDatasetConverter(DatasetConverter):
             "_audios": self._find_medias(example[self.dataset_attr.audios]) if self.dataset_attr.audios else None,
             "dissim": example.get("dissim", 1.0),
         }
+        # [claude debug]
+        if output["dissim"] != 1.0:
+            print(f"[claude debug] AlpacaConverter: dissim={output['dissim']}")
         return output
 
 
@@ -228,6 +231,9 @@ class SharegptDatasetConverter(DatasetConverter):
             "_audios": self._find_medias(example[self.dataset_attr.audios]) if self.dataset_attr.audios else None,
             "dissim": example.get("dissim", 1.0),
         }
+        # [claude debug]
+        if output["dissim"] != 1.0:
+            print(f"[claude debug] SharegptConverter: dissim={output['dissim']}, chosen={response[0]['content'] if response else 'N/A'}, rejected={response[1]['content'] if len(response)>1 else 'N/A'}")
         return output
 
 

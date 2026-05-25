@@ -96,8 +96,13 @@ class PairwiseDatasetProcessor(DatasetProcessor):
             model_inputs["images"].append(examples["_images"][i])
             model_inputs["videos"].append(examples["_videos"][i])
             model_inputs["audios"].append(examples["_audios"][i])
-            model_inputs["dissim"].append(examples.get("dissim", [1.0] * len(examples["_prompt"]))[i])
+            d = examples.get("dissim", [1.0] * len(examples["_prompt"]))[i]
+            model_inputs["dissim"].append(d)
 
+        # [claude debug]
+        dissims_in_batch = model_inputs["dissim"][-len(model_inputs["chosen_input_ids"]):]
+        if any(d != 1.0 for d in dissims_in_batch):
+            print(f"[claude debug] PairwiseProcessor: batch_size={len(dissims_in_batch)}, sample_dissims={[d for d in dissims_in_batch[:3] if d != 1.0]}")
         return model_inputs
 
     def print_data_example(self, example: dict[str, list[int]]) -> None:
