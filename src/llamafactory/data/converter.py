@@ -232,8 +232,8 @@ class SharegptDatasetConverter(DatasetConverter):
             "dissim": example.get("dissim", 1.0),
         }
         # [claude debug]
-        if output["dissim"] != 1.0:
-            print(f"[claude debug] SharegptConverter: dissim={output['dissim']}, chosen={response[0]['content'] if response else 'N/A'}, rejected={response[1]['content'] if len(response)>1 else 'N/A'}")
+        raw_val = example.get("dissim", "KEY_MISSING")
+        print(f"[claude debug] SharegptConverter: raw_dissim={raw_val}, output_dissim={output['dissim']}", flush=True)
         return output
 
 

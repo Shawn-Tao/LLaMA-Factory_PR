@@ -293,10 +293,9 @@ class CustomDPOTrainer(DPOTrainer):
         # [claude debug]
         if action_dissim is not None:
             vals = action_dissim.cpu().detach().numpy()
-            has_dissim = any(v != 1.0 for v in vals)
-            print(f"[claude debug] Trainer: batch_size={len(vals)}, has_non_default={has_dissim}, sample_values={vals[:5]}")
+            print(f"[claude debug] Trainer: values={vals}", flush=True)
         else:
-            print("[claude debug] Trainer: action_dissim is None (key not in batch)")
+            print("[claude debug] Trainer: action_dissim=None", flush=True)
         (
             policy_chosen_logps,
             policy_rejected_logps,

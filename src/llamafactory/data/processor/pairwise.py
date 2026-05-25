@@ -101,8 +101,8 @@ class PairwiseDatasetProcessor(DatasetProcessor):
 
         # [claude debug]
         dissims_in_batch = model_inputs["dissim"][-len(model_inputs["chosen_input_ids"]):]
-        if any(d != 1.0 for d in dissims_in_batch):
-            print(f"[claude debug] PairwiseProcessor: batch_size={len(dissims_in_batch)}, sample_dissims={[d for d in dissims_in_batch[:3] if d != 1.0]}")
+        has_key = "dissim" in examples
+        print(f"[claude debug] PairwiseProcessor: has_key={has_key}, batch_size={len(dissims_in_batch)}, sample={dissims_in_batch[:3]}", flush=True)
         return model_inputs
 
     def print_data_example(self, example: dict[str, list[int]]) -> None:
