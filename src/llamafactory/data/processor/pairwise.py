@@ -96,6 +96,7 @@ class PairwiseDatasetProcessor(DatasetProcessor):
             model_inputs["images"].append(examples["_images"][i])
             model_inputs["videos"].append(examples["_videos"][i])
             model_inputs["audios"].append(examples["_audios"][i])
+            model_inputs["dissim"].append(examples.get("dissim", [1.0] * len(examples["_prompt"]))[i])
 
         return model_inputs
 

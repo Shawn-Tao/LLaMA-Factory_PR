@@ -82,6 +82,8 @@ class CustomDPOTrainer(DPOTrainer):
         self.label_smoothing = finetuning_args.dpo_label_smoothing
         self.simpo_gamma = finetuning_args.simpo_gamma
         self.ld_alpha = finetuning_args.ld_alpha
+        self.orpo_margin = getattr(finetuning_args, "orpo_margin", 0.0)
+        self.orpo_dissim_weight = getattr(finetuning_args, "orpo_dissim_weight", False)
 
         Trainer.__init__(self, model=model, **kwargs)
         self.model_accepts_loss_kwargs = False  # overwrite trainer's default behavior
@@ -139,14 +141,25 @@ class CustomDPOTrainer(DPOTrainer):
         r"""Replace the method of DPO Trainer with the one of the standard Trainer."""
         return Trainer.get_batch_samples(self, *args, **kwargs)
 
-    def odds_ratio_loss(self, chosen_logps: "torch.Tensor", rejected_logps: "torch.Tensor") -> "torch.Tensor":
-        r"""Compute ORPO's odds ratio (OR) loss for batched log probabilities of the policy model."""
+    def odds_ratio_loss(
+        self,
+        chosen_logps: "torch.Tensor",
+        rejected_logps: "torch.Tensor",
+        action_dissim: Optional["torch.Tensor"] = None,
+    ) -> "torch.Tensor":
+        r"""Compute ORPO's odds ratio (OR) loss with optional margin and action-weighted lambda."""
         log_odds = (chosen_logps - rejected_logps) - (
             torch.log1p(-torch.exp(chosen_logps)) - torch.log1p(-torch.exp(rejected_logps))
         )
         sft_loss = -chosen_logps
-        odds_ratio_loss = -F.logsigmoid(log_odds)
-        orpo_loss = sft_loss + self.beta * odds_ratio_loss
+        # margin constraint: log_odds must exceed orpo_margin before penalty goes to zero
+        odds_ratio_loss = -F.logsigmoid(log_odds - self.orpo_margin)
+        # action-weighted lambda: pairs with larger physical discrepancy get stronger preference signal
+        if action_dissim is not None and self.orpo_dissim_weight:
+            weighted_beta = self.beta * action_dissim.to(chosen_logps.device).unsqueeze(-1)
+        else:
+            weighted_beta = self.beta
+        orpo_loss = sft_loss + weighted_beta * odds_ratio_loss
         return orpo_loss
 
     def simpo_loss(self, chosen_logps: "torch.Tensor", rejected_logps: "torch.Tensor") -> "torch.Tensor":
@@ -182,11 +195,14 @@ class CustomDPOTrainer(DPOTrainer):
         policy_rejected_logps: "torch.Tensor",
         reference_chosen_logps: Optional["torch.Tensor"],
         reference_rejected_logps: Optional["torch.Tensor"],
+        action_dissim: Optional["torch.Tensor"] = None,
     ) -> tuple["torch.Tensor", "torch.Tensor", "torch.Tensor"]:
         r"""Compute loss for preference learning."""
         if not self.finetuning_args.use_ref_model:
             if self.loss_type == "orpo":
-                losses = self.odds_ratio_loss(policy_chosen_logps, policy_rejected_logps)
+                losses = self.odds_ratio_loss(
+                    policy_chosen_logps, policy_rejected_logps, action_dissim=action_dissim
+                )
             elif self.loss_type == "simpo":
                 losses = self.simpo_loss(policy_chosen_logps, policy_rejected_logps)
             else:
@@ -266,6 +282,7 @@ class CustomDPOTrainer(DPOTrainer):
     ) -> tuple["torch.Tensor", dict[str, "torch.Tensor"]]:
         r"""Compute the DPO loss and other metrics for the given batch of inputs for train or test."""
         metrics = {}
+        action_dissim = batch.pop("dissim", None)
         (
             policy_chosen_logps,
             policy_rejected_logps,
@@ -280,6 +297,7 @@ class CustomDPOTrainer(DPOTrainer):
             policy_rejected_logps,
             reference_chosen_logps,
             reference_rejected_logps,
+            action_dissim=action_dissim,
         )
         sft_loss = -policy_chosen_logps_avg
         if self.ftx_gamma > 1e-6:

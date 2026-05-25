@@ -271,6 +271,11 @@ class PairwiseDataCollatorWithPadding(MultiModalDataCollatorForSeq2Seq):
         We generate 2 * n examples where the first n examples represent chosen examples and
         the last n examples represent rejected examples.
         """
+        dissims = []
+        for feature in features:
+            d = feature.pop("dissim", None)
+            dissims.append(d if d is not None else 1.0)
+
         concatenated_features = []
         for key in ("chosen", "rejected"):
             for feature in features:
@@ -284,7 +289,9 @@ class PairwiseDataCollatorWithPadding(MultiModalDataCollatorForSeq2Seq):
                 }
                 concatenated_features.append(target_feature)
 
-        return super().__call__(concatenated_features)
+        batch = super().__call__(concatenated_features)
+        batch["dissim"] = torch.tensor(dissims, dtype=torch.float32)
+        return batch
 
 
 @dataclass
