@@ -82,8 +82,15 @@ class CustomDPOTrainer(DPOTrainer):
         self.label_smoothing = finetuning_args.dpo_label_smoothing
         self.simpo_gamma = finetuning_args.simpo_gamma
         self.ld_alpha = finetuning_args.ld_alpha
-        self.orpo_margin = getattr(finetuning_args, "orpo_margin", 0.0)
-        self.orpo_dissim_weight = getattr(finetuning_args, "orpo_dissim_weight", False)
+        # print(finetuning_args)
+        self.orpo_margin = finetuning_args.orpo_margin
+        self.orpo_dissim_weight = finetuning_args.orpo_dissim_weight
+        # self.orpo_margin = getattr(finetuning_args, "orpo_margin", 0.0)
+        # self.orpo_dissim_weight = getattr(finetuning_args, "orpo_dissim_weight", False)
+        
+        # print("***********************************orpo_margin: ", self.orpo_margin)
+        # print("***********************************orpo_dissim_weight: ", self.orpo_dissim_weight)
+        # exit()
 
         Trainer.__init__(self, model=model, **kwargs)
         self.model_accepts_loss_kwargs = False  # overwrite trainer's default behavior
@@ -156,6 +163,8 @@ class CustomDPOTrainer(DPOTrainer):
         odds_ratio_loss = -F.logsigmoid(log_odds - self.orpo_margin)
         # action-weighted lambda: pairs with larger physical discrepancy get stronger preference signal
         if action_dissim is not None and self.orpo_dissim_weight:
+            print(action_dissim)
+            exit()
             weighted_beta = self.beta * action_dissim.to(chosen_logps.device).unsqueeze(-1)
         else:
             weighted_beta = self.beta
@@ -283,6 +292,8 @@ class CustomDPOTrainer(DPOTrainer):
         r"""Compute the DPO loss and other metrics for the given batch of inputs for train or test."""
         metrics = {}
         action_dissim = batch.pop("dissim", None)
+        print("action_dissim********************:", action_dissim)
+        exit()
         (
             policy_chosen_logps,
             policy_rejected_logps,

@@ -274,6 +274,42 @@
       "assistant_tag": "assistant"
     }
   },
+  "r2r_qwen3vl_orpo_1p1_tau15_dissim": {
+    "file_name":"20260525_172807_r2r_orpo_train_424_240_qwen3vl_1p1_tau15_dissim.json",
+    "ranking": true,
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "system_tag": "system",
+      "assistant_tag": "assistant"
+    }
+  },
+  "r2r_qwen3vl_orpo_1p1_tau15_dissim_test": {
+    "file_name":"r2r_dissim_test_data.json",
+    "ranking": true,
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "system_tag": "system",
+      "assistant_tag": "assistant"
+    }
+  },
   "r2r_01_test": {
     "file_name": "r2r_01_test.json",
     "formatting": "sharegpt",

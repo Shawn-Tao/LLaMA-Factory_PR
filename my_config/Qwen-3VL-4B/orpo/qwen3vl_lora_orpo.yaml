@@ -41,13 +41,17 @@ lora_target: q_proj,v_proj,o_proj,gate_proj
 pref_beta: 0.1
 pref_loss: orpo  # choices: [sigmoid (dpo), orpo, simpo]
 
+orpo_margin: 0.0
+
+orpo_dissim_weight: true
+
 # deepspeed fei offload
 # deepspeed: examples/deepspeed/ds_z3_config.json 
 # deepspeed: examples/deepspeed/ds_z3_offload_config.json 
 
 ### dataset
 # dataset: rlhf_v
-dataset: r2r_qwen3vl_orpo_1p1_tau3 # dpo_en_demo
+dataset: r2r_qwen3vl_orpo_1p1_tau15_dissim_test # dpo_en_demo
 template: qwen3_vl
 cutoff_len: 2048
 max_samples: 500000

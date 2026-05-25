@@ -167,6 +167,18 @@ class OFTArguments:
 @dataclass
 class RLHFArguments:
     r"""Arguments pertaining to the PPO, DPO and KTO training."""
+    orpo_margin: float = field(
+        default=0.0,
+        metadata={"help": "orpo_margin."},
+    )
+    orpo_dissim_weight: bool = field(
+        default=False,
+        metadata={"help": "open orpo_dissim_weight."},
+    )
+    pref_beta: float = field(
+        default=0.1,
+        metadata={"help": "The beta parameter in the preference loss."},
+    )
 
     pref_beta: float = field(
         default=0.1,
