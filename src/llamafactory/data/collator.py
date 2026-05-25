@@ -291,8 +291,6 @@ class PairwiseDataCollatorWithPadding(MultiModalDataCollatorForSeq2Seq):
 
         batch = super().__call__(concatenated_features)
         batch["dissim"] = torch.tensor(dissims, dtype=torch.float32)
-        # [claude debug]
-        print(f"[claude debug] Collator: n_pairs={len(dissims)}, dissims={dissims}", flush=True)
         return batch
 
 
