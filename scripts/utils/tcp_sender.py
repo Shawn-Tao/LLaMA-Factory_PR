@@ -1,7 +1,8 @@
 import socket
 import numpy as np
 import struct
-import pickle
+# import pickle
+import msgpack
 import zlib
 import cv2
 import time
@@ -23,8 +24,10 @@ logger = logging.getLogger(__name__)
 # ======================== 全局配置 ========================
 HOST = '127.0.0.1'  # 服务器地址
 PORT = 8888          # 服务器端口
-MAX_IMAGES = 5       # 最大图像数量
-IMAGE_SIZE = (240, 240)  # 图像尺寸
+# MAX_IMAGES = 5       # 最大图像数量
+MAX_IMAGES = 10       # 最大图像数量
+IMAGE_SIZE = (240,424)  # 图像尺寸  (numpy和cvmat都是 高、宽、维度)
+# IMAGE_SIZE = (360,424)  # 图像尺寸  (numpy和cvmat都是 高、宽、维度)
 RESPONSE_TIMEOUT = 10.0  # 响应超时时间（秒）
 
 # ======================== 协议定义 ========================
@@ -38,6 +41,8 @@ RESP_ERROR = 0x02
 RESP_WARNING = 0x03
 RESP_PROCESSING = 0x04
 
+
+
 # ======================== 发送端实现 ========================
 class CommandImageSender:
     def __init__(self, host, port):
@@ -49,24 +54,50 @@ class CommandImageSender:
         self.response_thread = None
         self.running = False
         self.response_condition = threading.Condition()
+        
+    def _encode_image(self, img):
+        return {
+            "shape": img.shape,
+            "dtype": str(img.dtype),
+            "data": img.tobytes()
+        }
+    
+    # def connect(self):
+    #     """连接到接收端"""
+    #     try:
+    #         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #         # self.client_socket.settimeout(10.0)  # 设置连接超时
+    #         self.client_socket.connect((self.host, self.port))
+            
+    #         # 启动响应接收线程
+    #         self.running = True
+    #         self.response_thread = threading.Thread(target=self._response_listener, daemon=True)
+    #         self.response_thread.start()
+            
+    #         logger.info(f"已连接到接收端 {self.host}:{self.port}")
+    #         return True
+    #     except Exception as e:
+    #         logger.error(f"连接失败: {str(e)}")
+    #         return False
     
     def connect(self):
-        """连接到接收端"""
-        try:
-            self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            # self.client_socket.settimeout(10.0)  # 设置连接超时
-            self.client_socket.connect((self.host, self.port))
-            
-            # 启动响应接收线程
-            self.running = True
-            self.response_thread = threading.Thread(target=self._response_listener, daemon=True)
-            self.response_thread.start()
-            
-            logger.info(f"已连接到接收端 {self.host}:{self.port}")
-            return True
-        except Exception as e:
-            logger.error(f"连接失败: {str(e)}")
-            return False
+        """连接到接收端（自动重试直到成功）"""
+        while True:  # 持续重试直到连接成功
+            try:
+                self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                # self.client_socket.settimeout(10.0)  # 设置连接超时
+                self.client_socket.connect((self.host, self.port))
+                
+                # 启动响应接收线程
+                self.running = True
+                self.response_thread = threading.Thread(target=self._response_listener, daemon=True)
+                self.response_thread.start()
+                
+                logger.info(f"已连接到接收端 {self.host}:{self.port}")
+                return True
+            except Exception as e:
+                logger.error(f"连接失败: {str(e)}，5秒后重试...")
+                time.sleep(5)  # 休眠5秒后重试
     
     def disconnect(self):
         """断开连接"""
@@ -114,7 +145,8 @@ class CommandImageSender:
                 # 解压缩并反序列化响应
                 try:
                     decompressed = zlib.decompress(data)
-                    response = pickle.loads(decompressed)
+                    # response = pickle.loads(decompressed)
+                    response = msgpack.unpackb(decompressed, raw=False)
                     with self.response_condition:
                         self.response_queue.put(response)
                         self.response_condition.notify()  # 通知主线程
@@ -202,7 +234,7 @@ class CommandImageSender:
             
             valid_images.append(img)
             
-            if len(valid_images) >= MAX_IMAGES:
+            if len(valid_images) > MAX_IMAGES:
                 logger.warning(f"达到最大图像数量限制 ({MAX_IMAGES})")
                 break
         
@@ -210,19 +242,37 @@ class CommandImageSender:
             logger.error("无有效图像可发送")
             return False
         
+        # try:
+        #     # 序列化数据
+        #     if include_command and self.pending_command:
+        #         # 发送指令+图像
+        #         data_to_send = (self.pending_command, valid_images)
+        #         self.pending_command = None  # 清除待发送指令
+        #         serialized = pickle.dumps(data_to_send)
+        #         header = CMD_HEADER
+        #     else:
+        #         # 仅发送图像
+        #         data_to_send = valid_images
+        #         serialized = pickle.dumps(data_to_send)
+        #         header = IMG_HEADER
+        
         try:
-            # 序列化数据
+            # ===== 构造 msgpack 数据 =====
             if include_command and self.pending_command:
-                # 发送指令+图像
-                data_to_send = (self.pending_command, valid_images)
-                self.pending_command = None  # 清除待发送指令
-                serialized = pickle.dumps(data_to_send)
+                payload = {
+                    "command": self.pending_command,
+                    "images": [self._encode_image(img) for img in valid_images]
+                }
+                self.pending_command = None
                 header = CMD_HEADER
             else:
-                # 仅发送图像
-                data_to_send = valid_images
-                serialized = pickle.dumps(data_to_send)
+                payload = {
+                    "images": [self._encode_image(img) for img in valid_images]
+                }
                 header = IMG_HEADER
+
+            # ===== msgpack 序列化 =====
+            serialized = msgpack.packb(payload, use_bin_type=True)
             
             # 压缩数据
             compressed = zlib.compress(serialized)

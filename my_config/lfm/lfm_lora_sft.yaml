@@ -1,7 +1,7 @@
 ### model
 # model_name_or_path: Qwen/Qwen2.5-VL-3B-Instruct-AWQ
 # model_name_or_path: Qwen/Qwen3-VL-4B-Instruct
-model_name_or_path: OpenGVLab/InternVL3_5-2B-HF
+model_name_or_path: LiquidAI/LFM2.5-VL-1.6B
 # image_max_pixels: 262144
 image_max_pixels: 101800
 # video_max_pixels: 16384
@@ -13,14 +13,12 @@ stage: sft
 do_train: true
 finetuning_type: lora
 
-
-
 lora_rank: 32
 lora_alpha: 64
 # lora_target: all
 
 # vision encoder 不调整
-lora_target: q_proj,v_proj,o_proj,gate_proj
+# lora_target: q_proj,v_proj,o_proj,gate_proj
 # lora_dropout: 0.05
 
 use_rslora: false
@@ -32,8 +30,8 @@ use_dora: False
 # kaiqi offload
 # deepspeed: examples/deepspeed/ds_z3_offload_config.json 
 
-use_unsloth: true
-use_unsloth_gc: true
+# use_unsloth: true
+# use_unsloth_gc: true
 
 ### dataset
 
@@ -41,7 +39,7 @@ use_unsloth_gc: true
 dataset: r2r_qwen3vl
 # dataset: mllm_demo
 # template: qwen3_vl
-template: phi4_mini
+template: lfm2_vl
 cutoff_len: 2048
 # 参考：https://github.com/hiyouga/LLaMA-Factory/issues/6844
 # cutoff_len: 4096
@@ -54,10 +52,10 @@ dataloader_num_workers: 4
 # preprocessing_num_workers: 1
 # dataloader_num_workers: 1
 # 保存预处理数据集，能省很多时间
-tokenized_path: saves/intenr3_5_vl-4b/dataset/sft
+tokenized_path: saves/lfm/dataset/sft
 
 ### output
-output_dir: saves/intenr3_5_vl-4b/lora/sft
+output_dir: saves/lfm/lora/sft
 logging_steps: 10
 # save_steps: 500
 save_steps: 50
@@ -67,7 +65,7 @@ save_only_model: false
 report_to: wandb  # choices: [none, wandb, tensorboard, swanlab, mlflow]
 
 ### train
-per_device_train_batch_size: 2
+per_device_train_batch_size: 3
 gradient_accumulation_steps: 8
 # gradient_accumulation_steps: 2
 learning_rate: 1.0e-4

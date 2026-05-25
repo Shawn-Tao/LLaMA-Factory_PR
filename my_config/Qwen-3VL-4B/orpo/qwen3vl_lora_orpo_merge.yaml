@@ -8,7 +8,8 @@ model_name_or_path: /LLM-VLM/train_saves/Qwen3-VL/qwen3_vl-4b-424-240-9-r2r-full
 # adapter_name_or_path: /LLM-VLM/train_saves/ORPO/ORPO-0721based-1127/qwen2_5_vl-3b/lora/orpo/checkpoint-13928
 # adapter_name_or_path: /LLM-VLM/train_saves/ORPO/ORPO-0721based-1129-1_5-new-dataset/qwen2_5vl_3b/lora/orpo/checkpoint-2791
 
-adapter_name_or_path: /LLM-VLM/train_saves/Qwen3-VL/qwen3_vl-4b-424-240-9-r2r-fulldatasets-1227_based_orpo_0102/lora/orpo/checkpoint-13000
+# adapter_name_or_path: /LLM-VLM/train_saves/Qwen3-VL/qwen3_vl-4b-424-240-9-r2r-fulldatasets-1227_based_orpo_0430-1p1-tau15/lora/orpo/checkpoint-13000
+adapter_name_or_path: /LLM-VLM/train_saves/Qwen3-VL/qwen3_vl-4b-424-240-9-r2r-fulldatasets-1227_based_orpo_0525-1p1-tau20/lora/orpo/checkpoint-13000
 
 template: qwen3_vl
 trust_remote_code: true
@@ -18,7 +19,8 @@ trust_remote_code: true
 # export_dir: /LLM-VLM/train_saves/R2R-240-5-20epoch-20250612/qwen2_vl-3b/outputs
 # export_dir: /LLM-VLM/train_saves/Qwen2.5-VL-3b-424-240-9-r2r-fulldatasets-more-stop-the-second-epoch-0817/outputs-10
 # export_dir: /LLM-VLM/train_saves/ORPO/ORPO-0721based-1127/qwen2_5_vl-3b/outputs-13928
-export_dir: /LLM-VLM/train_saves/Qwen3-VL/qwen3_vl-4b-424-240-9-r2r-fulldatasets-1227_based_orpo_0102/outputs-13000
+# export_dir: /LLM-VLM/train_saves/Qwen3-VL/qwen3_vl-4b-424-240-9-r2r-fulldatasets-1227_based_orpo_0430-1p1-tau15/outputs-13000
+export_dir: /LLM-VLM/train_saves/Qwen3-VL/qwen3_vl-4b-424-240-9-r2r-fulldatasets-1227_based_orpo_0525-1p1-tau20/outputs-13000
 export_size: 5
 export_device: cpu
 export_legacy_format: false

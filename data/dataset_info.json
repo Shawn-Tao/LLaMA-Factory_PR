@@ -184,6 +184,150 @@
       "assistant_tag": "assistant"
     }
   },
+  "r2r_qwen3vl_orpo_1p1_tau6": {
+    "file_name":"20260421_111247_r2r_orpo_train_424_240_qwen3vl_1p1_tau6.json",
+    "ranking": true,
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "system_tag": "system",
+      "assistant_tag": "assistant"
+    }
+  },
+  "r2r_qwen3vl_orpo_1p1_tau15": {
+    "file_name":"20260421_113447_r2r_orpo_train_424_240_qwen3vl_1p1_tau15.json",
+    "ranking": true,
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "system_tag": "system",
+      "assistant_tag": "assistant"
+    }
+  },
+  "r2r_qwen3vl_orpo_1p1_tau10": {
+    "file_name":"20260508_102728_r2r_orpo_train_424_240_qwen3vl_1p1_tau10.json",
+    "ranking": true,
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "system_tag": "system",
+      "assistant_tag": "assistant"
+    }
+  },
+  "r2r_qwen3vl_orpo_1p1_tau20": {
+    "file_name":"20260508_102916_r2r_orpo_train_424_240_qwen3vl_1p1_tau20.json",
+    "ranking": true,
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "system_tag": "system",
+      "assistant_tag": "assistant"
+    }
+  },
+  "r2r_qwen3vl_orpo_1p1_tau30": {
+    "file_name":"20260508_101800_r2r_orpo_train_424_240_qwen3vl_1p1_tau30.json",
+    "ranking": true,
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "system_tag": "system",
+      "assistant_tag": "assistant"
+    }
+  },
+  "r2r_qwen3vl_orpo_1p1_tau15_include_same_class": {
+    "file_name":"20260513_173411_r2r_orpo_train_424_240_qwen3vl_1p1_tau15_include_same_class.json",
+    "ranking": true,
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "system_tag": "system",
+      "assistant_tag": "assistant"
+    }
+  },
+  "r2r_qwen3vl_orpo_0p0_tau3": {
+    "file_name":"20260421_113743_r2r_orpo_train_424_240_qwen3vl_0p0_tau3.json",
+    "ranking": true,
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "system_tag": "system",
+      "assistant_tag": "assistant"
+    }
+  },
+  "r2r_qwen3vl_orpo_1p1_tau15_dissim": {
+    "file_name":"20260525_172807_r2r_orpo_train_424_240_qwen3vl_1p1_tau15_dissim.json",
+    "ranking": true,
+    "formatting": "sharegpt",
+    "columns": {
+      "messages": "messages",
+      "chosen": "chosen",
+      "rejected": "rejected",
+      "images": "images"
+    },
+    "tags": {
+      "role_tag": "role",
+      "content_tag": "content",
+      "user_tag": "user",
+      "system_tag": "system",
+      "assistant_tag": "assistant"
+    }
+  },
   "co_train_r2r_rl_train_424_240_more_stop":{
     "file_name": "co_train_r2r_rl_train_424_240_more_stop.json",
     "formatting": "sharegpt",

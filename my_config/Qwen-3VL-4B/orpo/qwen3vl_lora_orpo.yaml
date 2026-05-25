@@ -47,7 +47,9 @@ pref_loss: orpo  # choices: [sigmoid (dpo), orpo, simpo]
 
 ### dataset
 # dataset: rlhf_v
-dataset: r2r_qwen3vl_orpo_1p1_tau3 # dpo_en_demo
+# dataset: r2r_qwen3vl_orpo_1p1_tau15 # dpo_en_demo
+# dataset: r2r_qwen3vl_orpo_1p1_tau15_include_same_class # dpo_en_demo
+dataset: r2r_qwen3vl_orpo_1p1_tau20
 template: qwen3_vl
 cutoff_len: 2048
 max_samples: 500000

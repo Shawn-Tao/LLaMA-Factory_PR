@@ -8,7 +8,7 @@ model_name_or_path: OpenGVLab/InternVL3_5-2B-HF
 adapter_name_or_path: /LLM-VLM/train_saves/InternVL/intenr3_5_vl-4b/lora/sft/checkpoint-6964
 
 
-template: intern_vl
+template: gemma3n
 trust_remote_code: true
 
 # use_unsloth: true

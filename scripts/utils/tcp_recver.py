@@ -1,7 +1,8 @@
 import socket
 import numpy as np
 import struct
-import pickle
+# import pickle
+import msgpack
 import zlib
 import cv2
 import time
@@ -24,7 +25,7 @@ logger = logging.getLogger(__name__)
 HOST = '127.0.0.1'  # 服务器地址
 PORT = 8888          # 服务器端口
 # MAX_IMAGES = 5       # 最大图像数量
-IMAGE_SIZE = (240, 240)  # 图像尺寸
+IMAGE_SIZE = (240, 424)  # 图像尺寸
 RESPONSE_TIMEOUT = 10.0  # 响应超时时间（秒）
 
 # ======================== 协议定义 ========================
@@ -108,7 +109,20 @@ class CommandImageReceiver:
         try:
             # 解压缩并反序列化
             decompressed = zlib.decompress(data)
-            command, images = pickle.loads(decompressed)
+            # command, images = pickle.loads(decompressed)
+            
+            payload = msgpack.unpackb(decompressed, raw=False)
+            command = payload.get("command", None)
+            images_raw = payload["images"]
+            
+            images = []
+            for img_dict in images_raw:
+                shape = img_dict["shape"]
+                dtype = np.dtype(img_dict["dtype"])
+                data = img_dict["data"]
+
+                img = np.frombuffer(data, dtype=dtype).reshape(shape)
+                images.append(img)
             
             # 验证数据类型
             if not isinstance(command, str):
@@ -134,7 +148,17 @@ class CommandImageReceiver:
         try:
             # 解压缩并反序列化
             decompressed = zlib.decompress(data)
-            images = pickle.loads(decompressed)
+            # images = pickle.loads(decompressed)
+            payload = msgpack.unpackb(decompressed, raw=False)
+            images_raw = payload["images"]
+            images = []
+            for img_dict in images_raw:
+                shape = img_dict["shape"]
+                dtype = np.dtype(img_dict["dtype"])
+                data = img_dict["data"]
+
+                img = np.frombuffer(data, dtype=dtype).reshape(shape)
+                images.append(img)
             
             if not isinstance(images, list):
                 raise ValueError("图像部分不是列表")
@@ -167,7 +191,8 @@ class CommandImageReceiver:
             }
             
             # 序列化并压缩响应
-            serialized = pickle.dumps(response_data)
+            # serialized = pickle.dumps(response_data)
+            serialized = msgpack.packb(response_data)
             compressed = zlib.compress(serialized)
             
             # 构造响应包: 包头(3B) + 数据长度(4B) + 压缩数据
@@ -194,13 +219,17 @@ class CommandImageReceiver:
     def get_next_command_image(self):
         """获取下一个指令和图像组合"""
         # print("wait 之前")
+        # 如果 notify 在 wait 之前发生 → 会永远卡死
+        
+        # with self.cond:
+        #     ret = self.cond.wait()
         with self.cond:
-            ret = self.cond.wait()
-            # print("wait 之后")
+            while self.command_buffer.empty() and self.image_buffer.empty():
+                self.cond.wait()
             
             print("队列长度：",self.command_buffer.qsize(),self.image_buffer.qsize())
             
-            if(self.command_buffer.qsize()>0):
+            if not self.command_buffer.empty():
                 command = self.command_buffer.get()
                 images = self.image_buffer.get()
                 return images,command
@@ -222,7 +251,7 @@ def receiver_main():
     try:
         while True:
             # 等待并获取下一个指令+图像组合
-            command, images = receiver.get_next_command_image(timeout=30)
+            images,command = receiver.get_next_command_image(timeout=30)
             
             if command is None and images is None:
                 logger.info("等待超时，继续等待...")
