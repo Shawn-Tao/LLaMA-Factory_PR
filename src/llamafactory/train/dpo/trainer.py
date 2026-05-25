@@ -163,8 +163,6 @@ class CustomDPOTrainer(DPOTrainer):
         odds_ratio_loss = -F.logsigmoid(log_odds - self.orpo_margin)
         # action-weighted lambda: pairs with larger physical discrepancy get stronger preference signal
         if action_dissim is not None and self.orpo_dissim_weight:
-            print(action_dissim)
-            exit()
             weighted_beta = self.beta * action_dissim.to(chosen_logps.device).unsqueeze(-1)
         else:
             weighted_beta = self.beta
